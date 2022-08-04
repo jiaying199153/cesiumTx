@@ -1,25 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="./js/ctx.js"></script>
 </head>
+
 <body>
-<div id="cesiumContainer">
-</div>
-<script>
-    var initCesium = new InitCesium();
-    var viewer = initCesium.initViewer('cesiumContainer', {
-    });
-    var img_google=new Cesium.UrlTemplateImageryProvider({
-        subdomains: ["1", "2", "3"],
-        url: "http://mt{s}.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}"
-    });
-    var layers= viewer.scene.imageryLayers;
-     layers.removeAll();
-    layers.addImageryProvider(img_google);
-</script>
+    <div id="cesiumContainer">
+    </div>
+    <script>
+        let tdt_tk = 'fd4fb068c868ce47117fa02ee6f4c99b'
+        var viewer = new Cesium.Viewer('cesiumContainer', {
+            selectionIndicator: false,
+            animation: false,  //是否显示动画控件
+            baseLayerPicker: false, //是否显示图层选择控件
+            sceneModePicker: false,//是否显示地图2D2.5D3D模式
+            geocoder: false, //是否显示地名查找控件
+            timeline: false, //是否显示时间线控件
+            navigationHelpButton: false, //是否显示帮助信息控件
+            infoBox: false,  //是否显示点击要素之后显示的信息
+            fullscreenButton: true,
+            homeButton: false,//主页按钮，默认true
+            //天地图影像服务（经纬度）
+            imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+                url: "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" + tdt_tk,
+                layer: "天地图影像",
+                style: "default",
+                format: "image/jpeg",
+                subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'],
+                tileMatrixSetID: "GoogleMapsCompatible",
+            })
+        });
+
+        //天地图影像中文标记服务（经纬度）
+        var tdtCva = new Cesium.WebMapTileServiceImageryProvider({
+            url: "http://{s}.tianditu.gov.cn/cia_c/wmts?service=wmts&request=GetTile&version=1.0.0" +
+                "&LAYER=cia&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}" +
+                "&style=default&format=tiles&tk=" + tdt_tk,
+            layer: "tdtCva",
+            style: "default",
+            format: "tiles",
+            tileMatrixSetID: "c",
+            subdomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"],
+            tilingScheme: new Cesium.GeographicTilingScheme(),
+            tileMatrixLabels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"],
+            maximumLevel: 18,
+            show: false
+        });
+        var layers = viewer.imageryLayers;
+        layers.addImageryProvider(tdtCva);
+    </script>
 </body>
 
 </html>
