@@ -32,16 +32,8 @@
           subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
           tileMatrixSetID: "GoogleMapsCompatible",
         }),
-        //添加arcgis地形
-        terrainProvider: new Cesium.ArcGISTiledElevationTerrainProvider({
-          url: "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer",
-        }),
       });
 
-      //去掉LOGO
-      viewer._cesiumWidget._creditContainer.style.display = "none";
-      // 显示帧率
-      viewer.scene.debugShowFramesPerSecond = true;
       //天地图影像中文标记服务（经纬度）
       var tdtCva = new Cesium.WebMapTileServiceImageryProvider({
         url:
@@ -82,22 +74,24 @@
       var layers = viewer.imageryLayers;
       layers.addImageryProvider(tdtCva);
 
-      viewer.scene.camera.flyTo({
-        destination: {
-          x: -1244121.9426581487,
-          y: 5085439.458440664,
-          z: 3654926.4730463736,
-        },
-        orientation: {
-          heading: 4.788047581496534,
-          pitch: -0.4322797689024851,
-          roll: 6.27971882399201,
-        },
-        duration: 1,
+      let rect = Cesium.Rectangle.fromDegrees(73.5, 3.9, 135, 53.5);
+      Cesium.Camera.DEFAULT_VIEW_RECTANGLE = rect;
+      viewer.camera.flyTo({
+        destination: rect,
       });
-
-      // 地形夸张
-      viewer.scene.globe.terrainExaggeration = 5.0;
+      //通过VectorTileImageryProvider加载shp数据
+      var provider = new Cesium.VectorTileImageryProvider({
+        source: "../examples/source/shp/国界线.shp", //or "xxx.shp"
+        defaultStyle: {
+          outlineColor: "rgb(255,255,255)",
+          lineWidth: 2,
+          fill: false,
+          tileCacheSize: 200,
+        },
+        maximumLevel: 20,
+        minimumLevel: 1,
+      });
+      var layer = viewer.imageryLayers.addImageryProvider(provider);
     </script>
   </body>
 </html>
