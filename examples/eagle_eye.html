@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="./js/ctx.js"></script>
+</head>
+<body>
+<div id="cesiumContainer">
+<div id="eye"></div>
+</div>
+<script>
+    let viewer = new Cesium.Viewer('cesiumContainer',{
+            animation:false, //动画控制，默认true
+            baseLayerPicker:false,//地图切换控件(底图以及地形图)是否显示,默认显示true
+            fullscreenButton:false,//全屏按钮,默认显示true
+            geocoder:false,//地名查找,默认true
+            timeline:false,//时间线,默认true
+            vrButton:false,//双屏模式,默认不显示false
+            homeButton:false,//主页按钮，默认true
+            infoBox:false,//点击要素之后显示的信息,默认true
+            selectionIndicator:false,//选中元素显示,默认true
+            navigationHelpButton:false,//导航帮助说明,默认true
+            navigationInstructionsInitiallyVisible:false,
+            sceneModePicker : false,//是否显示地图2D2.5D3D模式
+            imageryProvider:new Cesium.UrlTemplateImageryProvider({
+               url:"http://webst02.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
+            }),
+    });
+    viewer.cesiumWidget.creditContainer.style.display = "none";//去除左下角LOGO
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);//取消双击事件
+
+    //鹰眼图
+   let viewer_eye = new Cesium.Viewer('eye', {
+          animation:false, //动画控制，默认true
+          baseLayerPicker:false,//地图切换控件(底图以及地形图)是否显示,默认显示true
+          fullscreenButton:false,//全屏按钮,默认显示true
+          geocoder:false,//地名查找,默认true
+          timeline:false,//时间线,默认true
+          vrButton:false,//双屏模式,默认不显示false
+          homeButton:false,//主页按钮，默认true
+          infoBox:false,//点击要素之后显示的信息,默认true
+          selectionIndicator:false,//选中元素显示,默认true
+          navigationHelpButton:false,//导航帮助说明,默认true
+          navigationInstructionsInitiallyVisible:false,
+          sceneModePicker : false,//是否显示地图2D2.5D3D模式
+          imageryProvider:new Cesium.UrlTemplateImageryProvider({
+            url:"http://webst02.is.autonavi.com/appmaptile?style=7&x={x}&y={y}&z={z}"
+          }),
+   });
+
+   viewer_eye.cesiumWidget.creditContainer.style.display = "none";//去除左下角LOGO
+   viewer_eye.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);//取消双击事件
+
+    //2.设置鹰眼图中球属性
+    let control = viewer_eye.scene.screenSpaceCameraController;
+    control.enableRotate = false;
+    control.enableTranslate = false;
+    control.enableZoom = false;
+    control.enableTilt = false;
+    control.enableLook = false;
+    let syncViewer = function() {
+        viewer_eye.camera.flyTo({
+            destination: viewer.camera.position,
+            orientation: {
+                heading: viewer.camera.heading,
+                pitch: viewer.camera.pitch,
+                roll: viewer.camera.roll
+            },
+            duration: 0.0
+        });
+    };
+
+    //3.同步
+    viewer.camera.changed.addEventListener(syncViewer);//卡顿，失败
+    viewer.scene.preRender.addEventListener(syncViewer);//谢谢木遥告知，如果添加这个事件监听，效果和第三种方式一样，成功
+
+
+</script>
+</body>
+
+</html>

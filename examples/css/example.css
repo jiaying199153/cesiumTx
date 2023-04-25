@@ -1,16 +1,32 @@
-html,body,#cesiumContainer{
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
+html,
+body,
+#cesiumContainer {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
-body{
-    background: #000;
-    color: #eee;
+
+body {
+  background: #000;
+  color: #eee;
 }
+
 #toolbar {
-    margin: 5px;
-    padding: 2px 5px;
-    position: absolute;
-    top:0
+  margin: 5px;
+  padding: 2px 5px;
+  position: absolute;
+  top: 0;
+}
+
+/* 鹰眼样式 */
+#eye {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  bottom: 0;
+  right: 0;
+  z-index: 999;
+  background: red;
+  border: solid blue 1px;
 }

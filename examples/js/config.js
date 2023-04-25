@@ -173,7 +173,15 @@ var exampleConfig = {
       otherDemo: {
         name: "其他示例",
         name_en: "otherDemo",
-        content: [],
+        content: [
+          {
+            name: "鹰眼图",
+            name_en: "",
+            thumbnail: "eagle_eye.png",
+            fileName: "eagle_eye",
+            page: "eagle_eye.html",
+          },
+        ],
       },
     },
   },
