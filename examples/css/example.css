@@ -30,3 +30,14 @@ body {
   background: red;
   border: solid blue 1px;
 }
+
+.panel,.window-shadow {
+  left: 0 !important;
+  top: 0!important;
+}
+.panel-title {
+  color: #ffff!important;
+}
+.window {
+  background: rgba(23, 49, 71, .8);
+}

@@ -95,7 +95,13 @@ var exampleConfig = {
       mapControlDemo: {
         name: "地图控件示例",
         name_en: "mapControlDemo",
-        content: [],
+        content: [{
+          name: "导航球",
+          name_en: "",
+          thumbnail: "control_navigationBall.png",
+          fileName: "control_navigationBall",
+          page: "control_navigationBall.html",
+        },],
       },
       sceneDemo: {
         name: "场景设置示例",
@@ -143,7 +149,15 @@ var exampleConfig = {
       "3DTilesDemo": {
         name: "3DTiles示例",
         name_en: "3DTilesDemo",
-        content: [],
+        content: [
+          {
+            name: "3DTiles图层",
+            name_en: "",
+            thumbnail: "model_3DTiles.png",
+            fileName: "model_3DTiles",
+            page: "model_3DTiles.html",
+          },
+        ],
       },
       ionDemo: {
         name: "Cesium Ion示例",
