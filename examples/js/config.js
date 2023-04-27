@@ -95,13 +95,22 @@ var exampleConfig = {
       mapControlDemo: {
         name: "地图控件示例",
         name_en: "mapControlDemo",
-        content: [{
-          name: "导航球",
-          name_en: "",
-          thumbnail: "control_navigationBall.png",
-          fileName: "control_navigationBall",
-          page: "control_navigationBall.html",
-        },],
+        content: [
+          {
+            name: "导航球",
+            name_en: "",
+            thumbnail: "control_navigationBall.png",
+            fileName: "control_navigationBall",
+            page: "control_navigationBall.html",
+          },
+          {
+            name: "自定义导航球",
+            name_en: "",
+            thumbnail: "control_navigationCustomize.png",
+            fileName: "control_navigationCustomize",
+            page: "control_navigationCustomize.html",
+          },
+        ],
       },
       sceneDemo: {
         name: "场景设置示例",

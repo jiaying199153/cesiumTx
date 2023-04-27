@@ -31,13 +31,29 @@ body {
   border: solid blue 1px;
 }
 
-.panel,.window-shadow {
+.panel,
+.window-shadow {
   left: 0 !important;
-  top: 0!important;
+  top: 0 !important;
 }
 .panel-title {
-  color: #ffff!important;
+  color: #ffff !important;
 }
 .window {
-  background: rgba(23, 49, 71, .8);
+  background: rgba(23, 49, 71, 0.8);
+}
+
+.compass-custom,
+.compass-outer {
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  background: rgb(62 65 65 / 40%);
+  border-radius: 50%;
+}
+.compass-inner,
+.compass-custom {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
