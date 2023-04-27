@@ -110,6 +110,13 @@ var exampleConfig = {
             fileName: "control_navigationCustomize",
             page: "control_navigationCustomize.html",
           },
+          {
+            name: "比例尺",
+            name_en: "",
+            thumbnail: "control_scale.png",
+            fileName: "control_scale",
+            page: "control_scale.html",
+          },
         ],
       },
       sceneDemo: {

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script type="text/javascript" src="./js/ctx.js"></script>
+  </head>
+  <body>
+    <div id="cesiumContainer" class="cesium-viewer"></div>
+    <script>
+      let viewer = new Cesium.Viewer("cesiumContainer", {
+        animation: false, //动画控制，默认true
+        baseLayerPicker: false, //地图切换控件(底图以及地形图)是否显示,默认显示true
+        fullscreenButton: false, //全屏按钮,默认显示true
+        geocoder: false, //地名查找,默认true
+        timeline: false, //时间线,默认true
+        vrButton: false, //双屏模式,默认不显示false
+        homeButton: false, //主页按钮，默认true
+        infoBox: false, //点击要素之后显示的信息,默认true
+        selectionIndicator: false, //选中元素显示,默认true
+        navigationHelpButton: false, //导航帮助说明,默认true
+        navigationInstructionsInitiallyVisible: false,
+        sceneModePicker: false, //是否显示地图2D2.5D3D模式
+        imageryProvider: new Cesium.BingMapsImageryProvider({
+          key: "Av63hPkCmH18oGGn5Qg3QhLBJvknZ97xbhyw3utDLRtFv7anHjXNOUQbyWBL5fK5",
+          url: "//dev.virtualearth.net",
+        }),
+      });
+      viewer.cesiumWidget.creditContainer.style.display = "none"; //去除左下角LOGO
+      viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK); //取消双击事件
+
+      show3DCoordinates();
+      /*显示当前坐标*/
+      function show3DCoordinates() {
+        //地图底部工具栏显示地图坐标信息
+        var elementbottom = document.createElement("div");
+        $(".cesium-viewer").append(elementbottom);
+        elementbottom.className = "mapfootBottom";
+        var coordinatesDiv = document.getElementById("scale_coordinates");
+        if (coordinatesDiv) {
+          coordinatesDiv.style.display = "block";
+        } else {
+          var _divID_coordinates = "scale_coordinates";
+          coordinatesDiv = document.createElement("div");
+          coordinatesDiv.id = _divID_coordinates;
+          coordinatesDiv.className = "map3D-coordinates";
+          coordinatesDiv.innerHTML =
+            "<span id='cd_label' style='font-size:17px;text-align:left;color:#edffff;'></span>";
+          $(".cesium-viewer").append(coordinatesDiv);
+          var handler3D = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+          handler3D.setInputAction(function (movement) {
+            var pick = new Cesium.Cartesian2(movement.endPosition.x, movement.endPosition.y);
+            if (pick) {
+              var cartesian = viewer.scene.globe.pick(viewer.camera.getPickRay(pick), viewer.scene);
+              if (cartesian) {
+                //世界坐标转地理坐标（弧度）
+                var cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                if (cartographic) {
+                  //海拔
+                  var height = viewer.scene.globe.getHeight(cartographic);
+                  //视角海拔高度
+                  var he = Math.sqrt(
+                    viewer.scene.camera.positionWC.x * viewer.scene.camera.positionWC.x +
+                      viewer.scene.camera.positionWC.y * viewer.scene.camera.positionWC.y +
+                      viewer.scene.camera.positionWC.z * viewer.scene.camera.positionWC.z
+                  );
+                  var he2 = Math.sqrt(
+                    cartesian.x * cartesian.x + cartesian.y * cartesian.y + cartesian.z * cartesian.z
+                  );
+                  //地理坐标（弧度）转经纬度坐标
+                  var point = [(cartographic.longitude / Math.PI) * 180, (cartographic.latitude / Math.PI) * 180];
+                  if (!height) {
+                    height = 0;
+                  }
+                  if (!he) {
+                    he = 0;
+                  }
+                  if (!he2) {
+                    he2 = 0;
+                  }
+                  if (!point) {
+                    point = [0, 0];
+                  }
+                  coordinatesDiv.innerHTML =
+                    "<span id='cd_label' style='font-size:17px;text-align:left;font-family:微软雅黑;color:#edffff;width: 100%'>" +
+                    "视高:" +
+                    (he - he2).toFixed(2) +
+                    "米" +
+                    "&nbsp;&nbsp;&nbsp;&nbsp;海拔:" +
+                    height.toFixed(2) +
+                    "米" +
+                    "&nbsp;&nbsp;&nbsp;&nbsp;经度：" +
+                    point[0].toFixed(6) +
+                    "&nbsp;&nbsp;纬度：" +
+                    point[1].toFixed(6) +
+                    "</span>";
+                }
+              }
+            }
+          }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        }
+      }
+    </script>
+  </body>
+</html>
