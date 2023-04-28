@@ -119,6 +119,19 @@ var exampleConfig = {
           },
         ],
       },
+      layerDemo: {
+        name: "图层控制示例",
+        name_en: "layerDemo",
+        content: [
+          {
+            name: " 绘制反选遮罩层",
+            name_en: "",
+            thumbnail: "layer_maskControl.png",
+            fileName: "layer_maskControl",
+            page: "layer_maskControl.html",
+          },
+        ],
+      },
       sceneDemo: {
         name: "场景设置示例",
         name_en: "sceneDemo",

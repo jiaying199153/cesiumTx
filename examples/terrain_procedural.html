@@ -53,13 +53,10 @@
             v += 0.0625 * noise(x * -10.3, y * 4.67);
             v += 0.03125 * noise(x * -22.09, y * -4.89);
             v += 0.015625 * noise(x * -29.48, y * -34.33);
-            // v += 0.0078125 * noise(x * -5.97, y * -90.31);
-            // v += 0.00390625 * noise(x * 98.83, y * -151.66);
-            return v; // -1 to +1
+            return v; 
           }
           function terrainNoise(x, y) {
             let v = fbm(x, y);
-            // Move to 0 to 1 range, then make it pointier
             v = Math.pow(v * 0.5 + 0.5, 2.0);
             return v;
           }
