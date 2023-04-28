@@ -153,6 +153,13 @@ var exampleConfig = {
             fileName: "dataSource_shp",
             page: "dataSource_shp.html",
           },
+          {
+            name: "GeoJson数据源",
+            name_en: "",
+            thumbnail: "dataSource_GeoJson.png",
+            fileName: "dataSource_GeoJson",
+            page: "dataSource_GeoJson.html",
+          },
         ],
       },
       geometriesDemo: {
