@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <script type="text/javascript" src="./js/ctx.js"></script>
+  </head>
+
+  <body>
+    <div id="cesiumContainer"></div>
+    <script>
+      let tdt_tk = "fd4fb068c868ce47117fa02ee6f4c99b";
+      var viewer = new Cesium.Viewer("cesiumContainer", {
+        selectionIndicator: false,
+        animation: false, //是否显示动画控件
+        baseLayerPicker: false, //是否显示图层选择控件
+        sceneModePicker: false, //是否显示地图2D2.5D3D模式
+        geocoder: false, //是否显示地名查找控件
+        timeline: false, //是否显示时间线控件
+        navigationHelpButton: false, //是否显示帮助信息控件
+        infoBox: false, //是否显示点击要素之后显示的信息
+        fullscreenButton: true,
+        homeButton: false, //主页按钮，默认true
+        //天地图影像服务（经纬度）
+        imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+          url:
+            "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" +
+            tdt_tk,
+          layer: "天地图影像",
+          style: "default",
+          format: "image/jpeg",
+          subdomains: ["0", "1", "2", "3", "4", "5", "6", "7"],
+          tileMatrixSetID: "GoogleMapsCompatible",
+        }),
+      });
+
+      //天地图影像中文标记服务（经纬度）
+      var tdtCva = new Cesium.WebMapTileServiceImageryProvider({
+        url:
+          "http://{s}.tianditu.gov.cn/cia_c/wmts?service=wmts&request=GetTile&version=1.0.0" +
+          "&LAYER=cia&tileMatrixSet=c&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}" +
+          "&style=default&format=tiles&tk=" +
+          tdt_tk,
+        layer: "tdtCva",
+        style: "default",
+        format: "tiles",
+        tileMatrixSetID: "c",
+        subdomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"],
+        tilingScheme: new Cesium.GeographicTilingScheme(),
+        tileMatrixLabels: [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+        ],
+        maximumLevel: 18,
+        show: false,
+      });
+      var layers = viewer.imageryLayers;
+      layers.addImageryProvider(tdtCva);
+
+      // 数据
+      const poin = [
+        {
+          id: "12321321",
+          name: "颍红测试点",
+          type: "固定枪机",
+          state: "在线",
+          position: {
+            x: 116.4577,
+            y: 39.8926,
+          },
+          text: "1",
+        },
+        {
+          id: "43244324",
+          name: "解放修理厂门口",
+          type: "固定枪机",
+          state: "在线",
+          position: {
+            x: 116.458,
+            y: 39.8944,
+          },
+          text: "2",
+        },
+        {
+          id: "43764324",
+          name: "新华路加油站",
+          type: "固定枪机",
+          state: "在线",
+          position: {
+            x: 116.4566,
+            y: 39.8923,
+          },
+          text: "3",
+        },
+        {
+          id: "437543345",
+          name: "康佳大药房",
+          type: "固定枪机",
+          state: "在线",
+          position: {
+            x: 116.4572,
+            y: 39.8923,
+          },
+          text: "4",
+        },
+      ];
+
+      //添加点
+      function addEntity(e) {
+        let pinBuilder = new Cesium.PinBuilder();
+        e.map((res) => {
+          let poin = viewer.entities.add({
+            id: res.id,
+            name: res.name,
+            position: Cesium.Cartesian3.fromDegrees(res.position.x, res.position.y),
+            billboard: {
+              image: pinBuilder.fromText(res.text, Cesium.Color.ROYALBLUE, 48).toDataURL(),
+              verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            },
+            monitoItems: {
+              data: res,
+            },
+          });
+        });
+        return e;
+      }
+
+      //加载点
+      addEntity(poin);
+
+      //设置初始视图位置
+      viewer.camera.setView({
+        // fromDegrees()方法，将经纬度和高程转换为世界坐标
+        destination: Cesium.Cartesian3.fromDegrees(116.45724598804823, 39.89322334229294, 1000),
+        orientation: {
+          // 方向
+          heading: 6.28318530717958,
+          // 视角
+          pitch: -1.568436775435878,
+          // 倾斜角度
+          roll: 0,
+        },
+      });
+
+      //添加点击事件
+      var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+      handler.setInputAction(function (event) {
+        addBubblePop(event);
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+      //添加弹框
+      function addBubblePop(event) {
+        var htmlOverlay = document.getElementById("popup-content-wrapper");
+        if (htmlOverlay) {
+          htmlOverlay.style.display = "block";
+          let popupContent = document.getElementsByClassName("popup-content");
+          popupContent[0].innerHTML = `<p>城市：武汉市</p><p>备注：这里可以放入任意html代码</p>`;
+        } else {
+          let pop = document.createElement("div");
+          pop.id = "popup-content-wrapper";
+          //添加关闭按钮
+          let close = document.createElement("div");
+          close.className = "close_btn";
+          close.innerText = "x";
+          pop.innerHTML = `<div class="popup-content"><p>城市：武汉市</p><p>备注：这里可以放入任意html代码</p></div>`;
+          document.body.appendChild(pop);
+          var scratch = new Cesium.Cartesian2();
+          htmlOverlay = document.getElementById("popup-content-wrapper");
+          htmlOverlay.appendChild(close);
+
+          //点击隐藏弹窗
+          close.onclick = function () {
+            pop.style.display = "none";
+          };
+        }
+        var position = viewer.scene.camera.pickEllipsoid(event.position, viewer.scene.globe.ellipsoid);
+        //将鼠标点击的位置转换经纬度
+        viewer.scene.preRender.addEventListener(function () {
+          var canvasPosition = viewer.scene.cartesianToCanvasCoordinates(position, scratch);
+          if (Cesium.defined(canvasPosition)) {
+            htmlOverlay.style.top = canvasPosition.y - htmlOverlay.clientHeight - 15 + "px";
+            htmlOverlay.style.left = canvasPosition.x - htmlOverlay.clientWidth / 2 + "px";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

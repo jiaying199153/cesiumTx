@@ -7,7 +7,7 @@
   var Js =
     "./js/Cesium-" +
     version +
-    "/Cesium.js,./js/InitCesium.js,./js/Sandcastle-header.js,./js/CesiumVectorTile.min.js,./js/turf.min.js,./js/jquery.min.js,./js/jquery.easyui.min.js,./js/CesiumNavigation.umd.js";
+    "/Cesium.js,./js/InitCesium.js,./js/Sandcastle-header.js,./js/CesiumVectorTile.min.js,./js/turf.min.js,./js/jquery.min.js,./js/jquery.easyui.min.js,./js/CesiumNavigation.umd.js,./js/HeatmapImageryProvider.js,./js/CesiumHeatmap.js";
   var Cs = "./js/Cesium-" + version + "/Widgets/widgets.css,./css/default/easyui.css,./css/example.css";
   var j = Js.split(",");
   var c = Cs.split(",");

@@ -130,6 +130,13 @@ var exampleConfig = {
             fileName: "layer_maskControl",
             page: "layer_maskControl.html",
           },
+          {
+            name: "热力图",
+            name_en: "",
+            thumbnail: "layer_heatControl.png",
+            fileName: "layer_heatControl",
+            page: "layer_heatControl.html",
+          },
         ],
       },
       sceneDemo: {
@@ -230,6 +237,13 @@ var exampleConfig = {
             thumbnail: "eagle_eye.png",
             fileName: "eagle_eye",
             page: "eagle_eye.html",
+          },
+          {
+            name: "气泡弹窗",
+            name_en: "",
+            thumbnail: "bubble_pop.png",
+            fileName: "bubble_pop",
+            page: "bubble_pop.html",
           },
         ],
       },
